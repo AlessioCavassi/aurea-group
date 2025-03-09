@@ -39,6 +39,7 @@ const NavigationLink = ({ to, children }) => {
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -48,11 +49,17 @@ const Navigation = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  // Close menu when route changes
+  const location = useLocation();
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-12 py-6 transition-all duration-700 ${
-        isScrolled ? 'bg-black/20 backdrop-blur-lg' : ''
+      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 md:px-12 py-4 sm:py-6 transition-all duration-700 ${
+        isScrolled || isMenuOpen ? 'bg-black/30 backdrop-blur-lg' : ''
       }`}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -70,8 +77,33 @@ const Navigation = () => {
         </motion.div>
       </Link>
 
-      {/* Navigation Links */}
-      <div className="flex items-center gap-2">
+      {/* Mobile Menu Button */}
+      <button 
+        className="md:hidden z-50 relative" 
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Toggle menu"
+      >
+        <div className="w-6 flex flex-col gap-1.5 items-end">
+          <motion.div 
+            className="h-0.5 bg-white" 
+            animate={{ width: isMenuOpen ? '24px' : '24px', rotate: isMenuOpen ? 45 : 0, y: isMenuOpen ? 8 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.div 
+            className="h-0.5 bg-white" 
+            animate={{ width: isMenuOpen ? '24px' : '16px', opacity: isMenuOpen ? 0 : 1 }}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.div 
+            className="h-0.5 bg-white" 
+            animate={{ width: isMenuOpen ? '24px' : '20px', rotate: isMenuOpen ? -45 : 0, y: isMenuOpen ? -8 : 0 }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
+      </button>
+
+      {/* Desktop Navigation Links */}
+      <div className="hidden md:flex items-center gap-2">
         <NavigationLink to="/">HOME</NavigationLink>
         <NavigationLink to="/about">ABOUT</NavigationLink>
         <NavigationLink to="/projects">PROJECTS</NavigationLink>
@@ -79,7 +111,7 @@ const Navigation = () => {
         {/* Contact Button */}
         <NavigationLink to="/contact">
           <motion.div
-            className="ml-6 px-6 py-2 rounded-full bg-white/[0.03] border border-white/10 text-sm text-white tracking-widest hover:bg-white/[0.07] transition-colors duration-500"
+            className="ml-4 px-5 py-2 rounded-full bg-white/[0.03] border border-white/10 text-sm text-white tracking-widest hover:bg-white/[0.07] transition-colors duration-500"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -87,10 +119,35 @@ const Navigation = () => {
           </motion.div>
         </NavigationLink>
       </div>
+      
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            className="fixed inset-0 bg-black/90 backdrop-blur-lg z-40 flex flex-col items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div 
+              className="flex flex-col items-center gap-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+            >
+              <Link to="/" className="text-2xl font-light text-white tracking-widest py-2">HOME</Link>
+              <Link to="/about" className="text-2xl font-light text-white tracking-widest py-2">ABOUT</Link>
+              <Link to="/projects" className="text-2xl font-light text-white tracking-widest py-2">PROJECTS</Link>
+              <Link to="/contact" className="text-2xl font-light text-white tracking-widest py-2">CONTACT</Link>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Background Blur Effect when scrolled */}
       <AnimatePresence>
-        {isScrolled && (
+        {(isScrolled || isMenuOpen) && (
           <motion.div
             className="absolute inset-0 bg-black/20 backdrop-blur-lg -z-10"
             initial={{ opacity: 0 }}

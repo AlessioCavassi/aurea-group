@@ -39,11 +39,11 @@ const BackgroundImage = () => {
         <OptimizedImage
           src="/images/hero-bg.webp"
           alt="Background texture"
-          className="w-full h-full object-contain"
+          className="w-full h-full object-cover md:object-contain"
           style={{
             minWidth: '100%',
             minHeight: '100%',
-            transform: 'scale(0.85)'
+            transform: 'scale(0.95) translateY(-2%)'
           }}
           priority={true}
         />
@@ -131,7 +131,7 @@ const HeroText = () => {
         animate={{ scale: 1 }}
         transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <h1 className="font-black text-[12vw] leading-[0.85] tracking-tighter text-white mix-blend-difference">
+        <h1 className="font-black text-[10vw] md:text-[8vw] lg:text-[6vw] leading-[0.9] sm:leading-[0.85] tracking-tighter text-white mix-blend-difference">
           {text.map((line, index) => (
             <motion.div
               key={line}
@@ -150,7 +150,7 @@ const HeroText = () => {
         </h1>
       </motion.div>
       <motion.p
-        className="mt-12 text-xl text-white/70 max-w-xl mx-auto leading-relaxed"
+        className="mt-6 sm:mt-8 md:mt-12 text-base sm:text-lg md:text-xl text-white/70 max-w-xl mx-auto px-4 sm:px-0 leading-relaxed"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.8 }}
@@ -164,13 +164,13 @@ const HeroText = () => {
 // ⚠️ OPTIMIZED - DO NOT MODIFY - Scroll Indicator
 const ScrollIndicator = () => (
   <motion.div 
-    className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4 text-white/50"
+    className="absolute bottom-6 sm:bottom-8 md:bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-4 text-white/50"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 1.2 }}
   >
     <motion.div 
-      className="w-0.5 h-16 bg-white/20"
+      className="w-0.5 h-10 sm:h-12 md:h-16 bg-white/20"
       animate={{ 
         scaleY: [1, 0.5, 1],
         opacity: [0.2, 0.5, 0.2]
