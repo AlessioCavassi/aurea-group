@@ -11,9 +11,10 @@ import ContactPage from './pages/ContactPage';
 const BackgroundImage = () => {
   const { scrollYProgress } = useScroll();
   
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.7]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.6]);
-  const blur = useTransform(scrollYProgress, [0, 1], [0, 1.5]);
+  // Riduco la variazione di scala per mantenere l'immagine più coerente durante lo scroll
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.7]);
+  const blur = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     <motion.div 
@@ -28,7 +29,7 @@ const BackgroundImage = () => {
           filter: blur.get() ? `blur(${blur.get()}px)` : 'none',
           willChange: 'transform'
         }}
-        className="relative w-[120%] h-[120%] sm:w-[150%] sm:h-[150%] origin-center"
+        className="relative w-full h-full origin-center overflow-hidden"
         transition={{
           type: "spring",
           stiffness: 40,
@@ -39,12 +40,7 @@ const BackgroundImage = () => {
         <OptimizedImage
           src="/images/hero-bg.webp"
           alt="Background texture"
-          className="w-full h-full object-contain"
-          style={{
-            minWidth: '100%',
-            minHeight: '100%',
-            transform: 'scale(1.05)'
-          }}
+          className="w-[130%] h-[130%] sm:w-[150%] sm:h-[150%] object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           priority={true}
         />
       </motion.div>
